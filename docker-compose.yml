@@ -1,0 +1,6 @@
+services:
+  immich-tiktok-remover:
+    image: alyssaholland99/immich-tiktok-remover
+    environment:
+      IMMICH_URL: "https://immich.yourserver.co.uk/"
+      IMMICH_API: "your-immich-api-key"
