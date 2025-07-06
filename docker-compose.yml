@@ -1,5 +1,6 @@
 services:
   immich-tiktok-remover:
+    container_name: immich-tiktok-remover
     image: alyssaholland99/immich-tiktok-remover
     restart: unless-stopped
     environment:
