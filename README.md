@@ -62,7 +62,7 @@ You can now use docker compose to run this project using the following template
 services:
   immich-tiktok-remover:
     container_name: immich-tiktok-remover
-    image: alyssaholland99/immich-tiktok-remover
+    image: alyssaholland99/immich-tiktok-remover:stable
     restart: unless-stopped
     environment:
       IMMICH_URL: "https://immich.yourserver.co.uk/"
