@@ -5,8 +5,9 @@ steps:
 - name: docker build
   when:
     branch:
-    - master
-    - stable/*
+      include:
+      - master
+      - stable/*
   image: plugins/docker
   settings:
     username:
@@ -20,7 +21,8 @@ steps:
 - name: docker build (feature)
   when:
     branch:
-    - feature/*
+      include:
+      - feature/*
   image: plugins/docker
   settings:
     username:
