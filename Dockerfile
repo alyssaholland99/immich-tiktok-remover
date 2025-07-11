@@ -1,18 +1,20 @@
 FROM python:3.12-slim
 
+# Create the immich-tiktok-remover user
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+
+USER $USERNAME
+
 WORKDIR /home/immich-tiktok-remover
+
+RUN chmod -R 775 /home/immich-tiktok-remover/.local
 
 ENV PIP_NO_CACHE_DIR=off 
 
 ARG USERNAME=immich-tiktok-remover
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-
-# Create the immich-tiktok-remover user
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
-
-USER $USERNAME
 
 COPY src/ .
 COPY requirements.txt .
