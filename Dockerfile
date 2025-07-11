@@ -1,5 +1,6 @@
 FROM python:3.12-slim
 ENV PIP_NO_CACHE_DIR=off 
+WORKDIR /home/immich-tiktok-remover
 
 ARG USERNAME=immich-tiktok-remover
 ARG USER_UID=1000
