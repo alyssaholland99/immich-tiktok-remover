@@ -12,7 +12,7 @@ USER $USERNAME
 
 WORKDIR /home/immich-tiktok-remover
 
-RUN chmod -R 775 /home/immich-tiktok-remover/.local
+RUN mkdir /home/immich-tiktok-remover/.local
 
 ENV PIP_NO_CACHE_DIR=off 
 
