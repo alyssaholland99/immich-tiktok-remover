@@ -26,7 +26,7 @@ COPY run_docker.sh .
 
 # Generate software bill of materials to verify packages
 RUN pip3 install cyclonedx-bom
-RUN python3 -m cyclonedx_py --format json -e
+RUN python3 -m cyclonedx_py --format requirements -e
 
 # Install dependancies for the TikTok remover
 RUN pip3 install --no-cache-dir -r requirements.txt
