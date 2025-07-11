@@ -10,17 +10,27 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 USER $USERNAME
 
+# Non-sudo user can only write to their home
 WORKDIR /home/immich-tiktok-remover
 
+# Fixing permissions on the slim base image
 RUN mkdir /home/immich-tiktok-remover/.local
 
+# Globally turn off pip3 cache to reduce file size
 ENV PIP_NO_CACHE_DIR=off 
 
+# Add required files
 COPY src/ .
 COPY requirements.txt .
 COPY run_docker.sh .
 
+# Generate software bill of materials to verify packages
+RUN pip3 install cyclonedx-bom
+RUN python3 -m cyclonedx_py --format json -e
+
+# Install dependancies for the TikTok remover
 RUN pip3 install --no-cache-dir -r requirements.txt
 
+# Run main tool
 CMD ["./run_docker.sh"]
 
