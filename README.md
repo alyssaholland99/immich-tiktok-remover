@@ -14,6 +14,18 @@ In my testing, out of 3569 videos, Immich-Tiktok-Remover found 1953 TikTok video
 
 I found no videos that were falsely detected as TikToks.
 
+## Immich API Key
+How to get your Immich key
+
+1) Go to your Immich server and sign in 
+2) Click your profile in the top right
+3) Click on `Account Settings`
+4) Click `API Keys`
+5) Click `New API Key`
+6) You only need `asset.read` from `asset` selected. You can select more but that just opens up security vulnerbilities if your key gets leaked
+7) Click `Create`
+8) Copy the API key and save it for when you need to run the tool
+
 ## Customization
 Here are all the customization options available for Immich-Tiktok-Remover:
 
@@ -56,13 +68,15 @@ Sets the --file-types to check mp4, webp and mov files.
 - Immich-Tiktok-Remover can't remove all TikTok videos in a few seconds. This is a process that can take some time, simply because of the way EasyOCR works and the performance it can deliver.
 - Currently, Immich-Tiktok-Remover only works with videos. Images, downloaded from TikTok, aren't currently automatically deleted from Immich.
 
+<<<<<<< HEAD
+=======
 ## Docker Compose
 You can now use docker compose to run this project using the following template
 ```
 services:
   immich-tiktok-remover:
     container_name: immich-tiktok-remover
-    image: alyssaholland99/immich-tiktok-remover:stable
+    image: alyssaholland99/immich-tiktok-remover
     restart: unless-stopped
     environment:
       IMMICH_URL: "https://immich.yourserver.co.uk/"
@@ -73,7 +87,6 @@ You'll have to swap out the URL and API key in the above file with ones tied to 
 
 Use `docker compose up -d`  (`docker-compose up -d` on older versions) to pull the image and start the container. 
 
-Last Stable Drone Run: [![Build Status](https://drone.alyssaserver.co.uk/api/badges/alyssaholland99/immich-tiktok-remover/status.svg?ref=refs/heads/stable)](https://drone.alyssaserver.co.uk/alyssaholland99/immich-tiktok-remover)
-
+>>>>>>> parent of d3094e7 (disable cache dir feature of pip to reduce image size)
 ## Thanks
 Big thanks for the Immich team for building such a great project.
