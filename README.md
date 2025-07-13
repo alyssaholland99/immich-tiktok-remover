@@ -14,6 +14,18 @@ In my testing, out of 3569 videos, Immich-Tiktok-Remover found 1953 TikTok video
 
 I found no videos that were falsely detected as TikToks.
 
+## Immich API Key
+How to get your Immich key
+
+1) Go to your Immich server and sign in 
+2) Click your profile in the top right
+3) Click on `Account Settings`
+4) Click `API Keys`
+5) Click `New API Key`
+6) You only need `asset.read` from `asset` selected. You can select more but that just opens up security vulnerbilities if your key gets leaked
+7) Click `Create`
+8) Copy the API key and save it for when you need to run the tool
+
 ## Customization
 Here are all the customization options available for Immich-Tiktok-Remover:
 
