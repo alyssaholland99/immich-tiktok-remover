@@ -14,10 +14,17 @@ This script performs the following tasks:
 import sys
 import time
 import os
-from image_verification import processVideo, verifyVideoNameAndDate
 from immich import pingServer, getAllAssets, serveVideo, trashVideo, archiveVideo, getVideoAdditionalData
 from python_params import get_config_params
 from first_time_run import firstIntroductionLines, firstTimeRunning
+
+# Get the configuration parameters
+config = get_config_params()
+
+if config["avoidImageRecognition"]:
+    print("Running in lite mode...")
+else:
+    from image_verification import processVideo, verifyVideoNameAndDate
 
 # Check if first time running
 if not os.path.isfile('.env'):
@@ -30,9 +37,6 @@ else:
     except Exception as e:
         print("Error while trying to connect to Immich. Mabey delete .env file from directory and run script again?")
         sys.exit()
-
-# Get the configuration parameters
-config = get_config_params()
 
 detectedTikTokVideos = 0
 noTiktokVideos = 0

@@ -17,10 +17,10 @@ RUN mkdir /home/immich-tiktok-remover/.local
 ENV PIP_NO_CACHE_DIR=off 
 
 COPY src/ .
-COPY requirements.txt .
+COPY requirements-lite.txt .
 COPY run_docker.sh .
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements-lite.txt
 
 CMD ["./run_docker.sh"]
 
