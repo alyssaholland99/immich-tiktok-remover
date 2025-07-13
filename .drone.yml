@@ -33,6 +33,22 @@ steps:
     tags:
     - edgerunner
 
+
+- name: docker build (kube_testing)
+  when:
+    branch:
+      include:
+      - kube/*
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKERHUB_USER
+    password:
+      from_secret: DOCKERHUB_PASS
+    repo: alyssaholland99/immich-tiktok-remover
+    tags:
+    - kube_testing
+
 - name: docker build (testing)
   when:
     branch:
