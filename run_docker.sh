@@ -1,5 +1,5 @@
 #!/bin/bash
 
 python3 immich_tiktok_remover.py
-
-exit 1
+echo "immich_end"
+sleep 10000000
