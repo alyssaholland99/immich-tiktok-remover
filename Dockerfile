@@ -22,5 +22,5 @@ COPY run_docker.sh .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-CMD ["./run_docker.sh"]
+CMD ["python3", "immich_tiktok_remover.py", "&&", "echo", "'end'"]
 
