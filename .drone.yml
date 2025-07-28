@@ -18,16 +18,22 @@ steps:
     tags:
     - stable
 
-- name: docker build (stable-lite)
+- name: setup lite
   when:
     branch:
       include:
-      - master
+      - stable-lite/*
+      - docker_image_lite
+  commands:
+    - ./make_lite.sh
+
+- name: docker build (lite)
+  when:
+    branch:
+      include:
       - stable-lite/*
       - docker_image_lite
   image: plugins/docker
-  commands:
-    - ./make_lite.sh
   settings:
     username:
       from_secret: DOCKERHUB_USER
@@ -59,6 +65,8 @@ steps:
       - master
       - feature/*
       - stable/*
+      - stable-lite/*
+      - docker_image_lite
   image: plugins/docker
   settings:
     username:
