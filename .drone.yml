@@ -2,12 +2,13 @@ kind: pipeline
 name: default
 
 steps:
-- name: docker build
+- name: docker build (stable)
   when:
     branch:
       include:
       - master
       - stable/*
+      - stable-full/*
   image: plugins/docker
   settings:
     username:
@@ -17,6 +18,35 @@ steps:
     repo: alyssaholland99/immich-tiktok-remover
     tags:
     - stable
+
+- name: setup lite
+  when:
+    branch:
+      include:
+      - master
+      - stable/*
+      - stable-lite/*
+  image: plugins/docker
+  commands:
+    - ./make_lite.sh
+
+- name: docker build (lite)
+  when:
+    branch:
+      include:
+      - master
+      - stable-lite/*
+      - stable/*
+      - docker_image_lite
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKERHUB_USER
+    password:
+      from_secret: DOCKERHUB_PASS
+    repo: alyssaholland99/immich-tiktok-remover
+    tags:
+    - stable-lite
 
 - name: docker build (feature)
   when:
@@ -40,6 +70,8 @@ steps:
       - master
       - feature/*
       - stable/*
+      - stable-lite/*
+      - docker_image_lite
   image: plugins/docker
   settings:
     username:
