@@ -1,4 +1,5 @@
 pwd
+ls
 sed -i -e 's/easyocr\=\=1\.7\.1/#\ Removed\ EasyOCR/g' requirements.txt
 sed -i -e 's/import\ easyocr/#\ Removed\ EasyOCR/g' image_verification.txt
 sed -i -e 's/from\ image_verification\ import\ processVideo\,\ verifyVideoNameAndDate/#\ Removed\ EasyOCR/g' immich_tiktok_remover.txt
