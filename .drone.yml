@@ -24,6 +24,7 @@ steps:
       include:
       - stable-lite/*
       - docker_image_lite
+  image: plugins/docker
   commands:
     - ./make_lite.sh
 
