@@ -8,7 +8,6 @@ steps:
       include:
       - master
       - stable/*
-      - stable-full/*
   image: plugins/docker
   settings:
     username:
@@ -23,8 +22,6 @@ steps:
   when:
     branch:
       include:
-      - master
-      - stable/*
       - stable-lite/*
   image: plugins/docker
   commands:
@@ -34,10 +31,7 @@ steps:
   when:
     branch:
       include:
-      - master
       - stable-lite/*
-      - stable/*
-      - docker_image_lite
   image: plugins/docker
   settings:
     username:
