@@ -1,13 +1,17 @@
+---
 kind: pipeline
-name: default
+name: stable
+type: docker
 
 steps:
+
 - name: docker build (stable)
   when:
     branch:
       include:
       - master
       - stable/*
+      - stable-full/*
   image: plugins/docker
   settings:
     username:
@@ -18,10 +22,19 @@ steps:
     tags:
     - stable
 
+---
+kind: pipeline
+name: stable-lite
+type: docker
+
+steps:
+
 - name: setup lite
   when:
     branch:
       include:
+      - master
+      - stable/*
       - stable-lite/*
   image: plugins/docker
   commands:
@@ -31,7 +44,10 @@ steps:
   when:
     branch:
       include:
+      - master
       - stable-lite/*
+      - stable/*
+      - docker_image_lite
   image: plugins/docker
   settings:
     username:
@@ -41,6 +57,13 @@ steps:
     repo: alyssaholland99/immich-tiktok-remover
     tags:
     - stable-lite
+
+---
+kind: pipeline
+name: other-branches
+type: docker
+
+steps:
 
 - name: docker build (feature)
   when:
