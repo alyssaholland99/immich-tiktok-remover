@@ -45,9 +45,8 @@ steps:
     branch:
       include:
       - master
-      - stable-lite/*
       - stable/*
-      - docker_image_lite
+      - stable-lite/*
   image: plugins/docker
   settings:
     username:
