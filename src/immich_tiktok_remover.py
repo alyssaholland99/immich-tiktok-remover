@@ -28,7 +28,7 @@ else:
     try:
         pingServer()
     except Exception as e:
-        print("Error while trying to connect to Immich. Mabey delete .env file from directory and run script again?")
+        print("Error while trying to connect to Immich. Maybe delete the .env file from the working directory and run script again?")
         sys.exit()
 
 # Get the configuration parameters
