@@ -85,7 +85,7 @@ You'll have to swap out the URL and API key in the above file with ones tied to 
 
 Use `docker compose up -d`  (`docker-compose up -d` on older versions) to pull the image and start the container. 
 
-Last Stable Drone Run: [![Build Status](https://drone.alyssaserver.co.uk/api/badges/alyssaholland99/immich-tiktok-remover/status.svg?ref=refs/heads/stable)](https://drone.alyssaserver.co.uk/alyssaholland99/immich-tiktok-remover)
+Last Stable Drone Run from master branch: [![Build Status](https://drone.alyssaserver.co.uk/api/badges/alyssaholland99/immich-tiktok-remover/status.svg)](https://drone.alyssaserver.co.uk/alyssaholland99/immich-tiktok-remover)
 
 ## Thanks
 Big thanks for the Immich team for building such a great project.
