@@ -7,7 +7,7 @@ services:
       IMMICH_URL: "https://immich.yourserver.co.uk/"
       IMMICH_API: "your-immich-api-key"
       RESTART_TIMEOUT: 3600 # Time in seconds the script waits to restart (default 1hr)
-    #args:
+    #args: # Optional command line arguments, explanation can be found at https://github.com/mxc2/immich-tiktok-remover/blob/master/README.md
       #- OUTPUT_ALL=False
       #- ARCHIVE=False
       #- SEARCH_ARCHIVED=False
