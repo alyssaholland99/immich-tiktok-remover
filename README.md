@@ -22,7 +22,7 @@ How to get your Immich key
 3) Click on `Account Settings`
 4) Click `API Keys`
 5) Click `New API Key`
-6) You only need `asset.read` from `asset` selected. You can select more but that just opens up security vulnerbilities if your key gets leaked
+6) You may need the `all` permissions from Immich 1.137.0 due to API key changes
 7) Click `Create`
 8) Copy the API key and save it for when you need to run the tool
 
