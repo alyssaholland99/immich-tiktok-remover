@@ -97,3 +97,11 @@ steps:
     repo: DOCKERHUB_REPOSITORY
     tags:
     - testing
+
+- name: Vunerability scan w/ Snyk
+  image: drone-plugins/drone-snyk
+  pull: if-not-exists
+  privileged: true
+  settings:
+      image: DOCKERHUB_REPOSITORY
+      fail_on_issues: false
