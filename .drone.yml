@@ -106,5 +106,5 @@ steps:
   pull: if-not-exists
   privileged: true
   settings:
-      image: DOCKERHUB_REPOSITORY
+      image: DOCKERHUB_REPOSITORY:latest
       fail_on_issues: false
