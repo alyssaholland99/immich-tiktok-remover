@@ -1,103 +1,84 @@
----
 kind: pipeline
 name: stable
 type: docker
 
 steps:
+  - name: Build Stable Image
+    when:
+      any_of:
+        - branch: { include: [ master, "stable/*", "stable-full/*" ] }
+        - tag: { include: [ "v.*" ] }
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable
 
-- name: docker build (stable)
-  when:
-    branch:
-      include:
-      - master
-      - stable/*
-      - stable-full/*
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: DOCKERHUB_USER
-    password:
-      from_secret: DOCKERHUB_PASS
-    repo: 
-      from_secret: DOCKERHUB_REPOSITORY
-    tags:
-    - stable
+  - name: Setup Lite Environment
+    when:
+      any_of:
+        - branch: { include: [ master, "stable/*", "stable-lite/*" ] }
+        - tag: { include: [ "v.*" ] }
+    commands:
+      - ./make_lite.sh
 
----
-kind: pipeline
-name: stable-lite
-type: docker
+  - name: Build Stable-Lite Image
+    when:
+      any_of:
+        - branch: { include: [ master, "stable/*", "stable-lite/*" ] }
+        - tag: { include: [ "v.*" ] }
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable-lite
 
-steps:
-
-- name: setup lite
-  when:
-    branch:
-      include:
-      - master
-      - stable/*
-      - stable-lite/*
-  image: plugins/docker
-  commands:
-    - ./make_lite.sh
-
-- name: docker build (lite)
-  when:
-    branch:
-      include:
-      - master
-      - stable/*
-      - stable-lite/*
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: DOCKERHUB_USER
-    password:
-      from_secret: DOCKERHUB_PASS
-    repo: 
-      from_secret: DOCKERHUB_REPOSITORY
-    tags:
-    - stable-lite
-
----
 kind: pipeline
 name: other-branches
 type: docker
 
 steps:
+  - name: Build Feature Branch Image
+    when:
+      branch:
+        include:
+          - feature/*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - edgerunner
 
-- name: docker build (feature)
-  when:
-    branch:
-      include:
-      - feature/*
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: DOCKERHUB_USER
-    password:
-      from_secret: DOCKERHUB_PASS
-    repo: 
-      from_secret: DOCKERHUB_REPOSITORY
-    tags:
-    - edgerunner
-
-- name: docker build (testing)
-  when:
-    branch:
-      exclude:
-      - master
-      - feature/*
-      - stable/*
-      - stable-lite/*
-      - docker_image_lite
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: DOCKERHUB_USER
-    password:
-      from_secret: DOCKERHUB_PASS
-    repo: 
-      from_secret: DOCKERHUB_REPOSITORY
-    tags:
-    - testing
+  - name: Build Testing Branch Image
+    when:
+      branch:
+        exclude:
+          - master
+          - feature/*
+          - stable/*
+          - stable-lite/*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - testing
