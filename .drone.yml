@@ -18,7 +18,7 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: alyssaholland99/immich-tiktok-remover
+    repo: DOCKERHUB_REPOSITORY
     tags:
     - stable
 
@@ -53,7 +53,7 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: alyssaholland99/immich-tiktok-remover
+    repo: DOCKERHUB_REPOSITORY
     tags:
     - stable-lite
 
@@ -75,7 +75,7 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: alyssaholland99/immich-tiktok-remover
+    repo: DOCKERHUB_REPOSITORY
     tags:
     - edgerunner
 
@@ -94,6 +94,6 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: alyssaholland99/immich-tiktok-remover
+    repo: DOCKERHUB_REPOSITORY
     tags:
     - testing
