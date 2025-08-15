@@ -99,6 +99,9 @@ steps:
     - testing
 
 - name: Vunerability scan w/ Snyk
+  depends_on:
+    - docker build (testing)
+    - docker build (feature)
   image: drone-plugins/drone-snyk
   pull: if-not-exists
   privileged: true
