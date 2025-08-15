@@ -7,15 +7,35 @@ trigger:
   event:
     - push
     - tag
-  branch:
-    - master
-    - stable/*
-    - stable-full/*
-  ref:
-    - refs/tags/v*
 
 steps:
   - name: docker build (stable)
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-full/*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable
+
+  - name: docker build (stable tag)
+    when:
+      event:
+        include: [tag]
+      ref:
+        include:
+          - refs/tags/v*
     image: plugins/docker
     settings:
       username:
@@ -37,20 +57,48 @@ trigger:
   event:
     - push
     - tag
-  branch:
-    - master
-    - stable/*
-    - stable-lite/*
-  ref:
-    - refs/tags/v*
 
 steps:
   - name: setup lite
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-lite/*
     image: plugins/docker
     commands:
       - ./make_lite.sh
 
   - name: docker build (lite)
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-lite/*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable-lite
+
+  - name: docker build (lite tag)
+    when:
+      event:
+        include: [tag]
+      ref:
+        include:
+          - refs/tags/v*
     image: plugins/docker
     settings:
       username:
