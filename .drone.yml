@@ -103,7 +103,7 @@ steps:
 
 ---
 kind: pipeline
-name: other-branches
+name: other-branches-arm
 type: docker
 
 platform:
@@ -111,7 +111,7 @@ platform:
 
 steps:
 
-- name: docker build (feature)
+- name: docker build arm (feature)
   when:
     branch:
       include:
@@ -124,9 +124,9 @@ steps:
       from_secret: DOCKERHUB_PASS
     repo: DOCKERHUB_REPOSITORY
     tags:
-    - edgerunner
+    - edgerunner-arm
 
-- name: docker build (testing)
+- name: docker build arm (testing)
   when:
     branch:
       exclude:
@@ -143,4 +143,4 @@ steps:
       from_secret: DOCKERHUB_PASS
     repo: DOCKERHUB_REPOSITORY
     tags:
-    - testing
+    - testing-arm
