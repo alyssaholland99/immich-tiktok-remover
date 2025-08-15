@@ -1,7 +1,7 @@
 services:
   immich-tiktok-remover:
     container_name: immich-tiktok-remover
-    image: alyssaholland99/immich-tiktok-remover:stable
+    image: alyssaholland99/immich-tiktok-remover:stable-lite
     restart: unless-stopped
     environment:
       IMMICH_URL: "https://immich.yourserver.co.uk/"
@@ -17,4 +17,4 @@ services:
       #FILE_NAME_IS_NOT_ALUMN=False
       #FILE_CREATED_AFTER=1472688000
       #TEXT_TO_CHECK=TikTok
-      #AVOID_IMAGE_RECOGNITION=False
+      #AVOID_IMAGE_RECOGNITION=False # If you're setting this to False, you may as well just use the 'stable-lite' image which is smaller on your filesystem
