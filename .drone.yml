@@ -3,21 +3,19 @@ kind: pipeline
 type: docker
 name: stable
 
+trigger:
+  event:
+    - push
+    - tag
+  branch:
+    - master
+    - stable/*
+    - stable-full/*
+  ref:
+    - refs/tags/v*
+
 steps:
   - name: docker build (stable)
-    when:
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-full/*
-      event:
-        include:
-          - push
-          - tag
-      ref:
-        include:
-          - refs/tags/v*
     image: plugins/docker
     settings:
       username:
@@ -28,45 +26,31 @@ steps:
         from_secret: DOCKERHUB_REPOSITORY
       tags:
         - stable
+        - ${DRONE_TAG}
 
 ---
 kind: pipeline
 type: docker
 name: stable-lite
 
+trigger:
+  event:
+    - push
+    - tag
+  branch:
+    - master
+    - stable/*
+    - stable-lite/*
+  ref:
+    - refs/tags/v*
+
 steps:
   - name: setup lite
-    when:
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-lite/*
-      event:
-        include:
-          - push
-          - tag
-      ref:
-        include:
-          - refs/tags/v*
     image: plugins/docker
     commands:
       - ./make_lite.sh
 
   - name: docker build (lite)
-    when:
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-lite/*
-      event:
-        include:
-          - push
-          - tag
-      ref:
-        include:
-          - refs/tags/v*
     image: plugins/docker
     settings:
       username:
@@ -77,11 +61,23 @@ steps:
         from_secret: DOCKERHUB_REPOSITORY
       tags:
         - stable-lite
+        - ${DRONE_TAG}
 
 ---
 kind: pipeline
 type: docker
 name: other-branches
+
+trigger:
+  event:
+    - push
+  branch:
+    exclude:
+      - master
+      - feature/*
+      - stable/*
+      - stable-lite/*
+      - docker_image_lite
 
 steps:
   - name: docker build (feature)
@@ -101,14 +97,6 @@ steps:
         - edgerunner
 
   - name: docker build (testing)
-    when:
-      branch:
-        exclude:
-          - master
-          - feature/*
-          - stable/*
-          - stable-lite/*
-          - docker_image_lite
     image: plugins/docker
     settings:
       username:
