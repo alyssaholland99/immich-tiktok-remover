@@ -62,6 +62,53 @@ kind: pipeline
 name: other-branches
 type: docker
 
+platform:
+  arch: amd64
+
+steps:
+
+- name: docker build (feature)
+  when:
+    branch:
+      include:
+      - feature/*
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKERHUB_USER
+    password:
+      from_secret: DOCKERHUB_PASS
+    repo: DOCKERHUB_REPOSITORY
+    tags:
+    - edgerunner
+
+- name: docker build (testing)
+  when:
+    branch:
+      exclude:
+      - master
+      - feature/*
+      - stable/*
+      - stable-lite/*
+      - docker_image_lite
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKERHUB_USER
+    password:
+      from_secret: DOCKERHUB_PASS
+    repo: DOCKERHUB_REPOSITORY
+    tags:
+    - testing
+
+---
+kind: pipeline
+name: other-branches
+type: docker
+
+platform:
+  arch: arm64
+
 steps:
 
 - name: docker build (feature)
