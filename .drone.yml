@@ -22,6 +22,17 @@ steps:
     tags:
     - stable
 
+- name: Vunerability scan w/ Snyk
+  #depends_on:
+  #  - docker build (testing)
+  #  - docker build (feature)
+  image: drone-plugins/drone-snyk
+  pull: if-not-exists
+  privileged: true
+  settings:
+      image: DOCKERHUB_REPOSITORY:latest
+      fail_on_issues: false
+
 ---
 kind: pipeline
 name: stable-lite
@@ -64,44 +75,12 @@ type: docker
 
 steps:
 
-- name: docker build (feature)
-  when:
-    branch:
-      include:
-      - feature/*
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: DOCKERHUB_USER
-    password:
-      from_secret: DOCKERHUB_PASS
-    repo: DOCKERHUB_REPOSITORY
-    tags:
-    - edgerunner
 
-- name: docker build (testing)
-  when:
-    branch:
-      exclude:
-      - master
-      - feature/*
-      - stable/*
-      - stable-lite/*
-      - docker_image_lite
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: DOCKERHUB_USER
-    password:
-      from_secret: DOCKERHUB_PASS
-    repo: DOCKERHUB_REPOSITORY
-    tags:
-    - testing
 
 - name: Vunerability scan w/ Snyk
-  depends_on:
-    - docker build (testing)
-    - docker build (feature)
+  #depends_on:
+  #  - docker build (testing)
+  #  - docker build (feature)
   image: drone-plugins/drone-snyk
   pull: if-not-exists
   privileged: true
