@@ -18,7 +18,8 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: DOCKERHUB_REPOSITORY
+    repo: 
+      from_secret: DOCKERHUB_REPOSITORY
     tags:
     - stable
 
@@ -53,7 +54,8 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: DOCKERHUB_REPOSITORY
+    repo: 
+      from_secret: DOCKERHUB_REPOSITORY
     tags:
     - stable-lite
 
@@ -75,7 +77,8 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: DOCKERHUB_REPOSITORY
+    repo: 
+      from_secret: DOCKERHUB_REPOSITORY
     tags:
     - edgerunner
 
@@ -94,6 +97,7 @@ steps:
       from_secret: DOCKERHUB_USER
     password:
       from_secret: DOCKERHUB_PASS
-    repo: DOCKERHUB_REPOSITORY
+    repo: 
+      from_secret: DOCKERHUB_REPOSITORY
     tags:
     - testing
