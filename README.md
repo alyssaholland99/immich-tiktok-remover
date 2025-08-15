@@ -90,7 +90,7 @@ services:
       #FILE_NAME_IS_NOT_ALUMN=False
       #FILE_CREATED_AFTER=1472688000
       #TEXT_TO_CHECK=TikTok
-      #AVOID_IMAGE_RECOGNITION=False
+      #AVOID_IMAGE_RECOGNITION=False  # If you're setting this to False, you may as well just use the 'stable-lite' image which is smaller on your filesystem
 ```
 You'll have to swap out the URL and API key in the above file with ones tied to your server. 
 
