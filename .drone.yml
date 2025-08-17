@@ -48,8 +48,39 @@ steps:
         - stable
         - ${DRONE_TAG}
 
-  - name: Test image
+  - name: Test image (tag)
     image: docker:dind
+    when:
+      event:
+        include: [tag]
+      ref:
+        include:
+          - refs/tags/v*
+    depends_on:
+      - docker build (stable)
+      - docker build (stable tag)
+    volumes:
+    - name: dockersock
+      path: /var/run
+    commands:
+    - sleep 5 # give docker enough time to start
+    - ./testing/docker/setup_time.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/setup_videos.sh
+    - ./testing/docker/run_tiktok_remover.sh
+    - ./testing/docker/check_itr_output.sh
+    - ./testing/docker/cleanup.sh
+
+  - name: Test image (push)
+    image: docker:dind
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-full/*
     depends_on:
       - docker build (stable)
       - docker build (stable tag)
@@ -130,8 +161,40 @@ steps:
         - stable-lite
         - ${DRONE_TAG}
 
-  - name: Test image
+  - name: Test image (tag)
     image: docker:dind
+    when:
+      event:
+        include: [tag]
+      ref:
+        include:
+          - refs/tags/v*
+    depends_on:
+      - docker build (lite)
+      - docker build (lite tag)
+    volumes:
+    - name: dockersock
+      path: /var/run
+    commands:
+    - sleep 5 # give docker enough time to start
+    - ./testing/docker/setup_time.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/set_stable-lite.sh
+    - ./testing/docker/setup_videos.sh
+    - ./testing/docker/run_tiktok_remover.sh
+    - ./testing/docker/check_itr_output.sh
+    - ./testing/docker/cleanup.sh
+
+  - name: Test image (push)
+    image: docker:dind
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-lite/*
     depends_on:
       - docker build (lite)
       - docker build (lite tag)
@@ -149,7 +212,6 @@ steps:
     - ./testing/docker/cleanup.sh
 
     # API Key: NEZqh8TiO9L1Bk4MBZVO6bQoDjBeAoQfBZt5r46q5pw
-
 ---
 kind: pipeline
 type: docker
