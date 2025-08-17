@@ -1,5 +1,8 @@
 # Copy video files onto immich container
 docker exec immich_server bash -c "mkdir -p /usr/src/app/videos"
+
+docker ps
+
 docker cp ./testing/docker/tiktok_videos immich_server:/usr/src/app/videos
 docker cp ./testing/docker/non-tiktok_videos immich_server:/usr/src/app/videos
 
