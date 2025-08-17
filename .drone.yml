@@ -128,30 +128,42 @@ trigger:
       - docker_image_lite
 
 steps:
-  - name: docker build (feature)
-    when:
-      branch:
-        include:
-          - feature/*
-    image: plugins/docker
-    settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
-      tags:
-        - edgerunner
 
-  - name: docker build (testing)
-    image: plugins/docker
-    settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
-      tags:
-        - testing
+#  - name: docker build (feature)
+#    when:
+#      branch:
+#        include:
+#          - feature/*
+#    image: plugins/docker
+#    settings:
+#      username:
+#        from_secret: DOCKERHUB_USER
+#      password:
+#        from_secret: DOCKERHUB_PASS
+#      repo:
+#        from_secret: DOCKERHUB_REPOSITORY
+#      tags:
+#        - edgerunner
+#
+#  - name: docker build (testing)
+#    image: plugins/docker
+#    settings:
+#      username:
+#        from_secret: DOCKERHUB_USER
+#      password:
+#        from_secret: DOCKERHUB_PASS
+#      repo:
+#        from_secret: DOCKERHUB_REPOSITORY
+#      tags:
+#        - testing
+
+  - name: test image
+    image: debian:bookworm-slim
+    commands:
+      - ./testing/docker/setup_debian.sh
+      - ./testing/docker/setup_compose.sh
+    volumes:
+    - name: docker_sock
+      host:
+        path: /var/run/docker.sock
+
