@@ -260,9 +260,9 @@ steps:
 
   - name: Test image
     image: docker:dind
-    depends_on:
-      - docker build (testing)
-      - docker build (feature)
+    #depends_on:
+    #  - docker build (testing)
+    #  - docker build (feature)
     volumes:
     - name: dockersock
       path: /var/run
