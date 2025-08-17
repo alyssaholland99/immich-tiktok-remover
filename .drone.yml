@@ -50,6 +50,9 @@ steps:
 
   - name: Test image
     image: docker:dind
+    depends_on:
+      - docker build (stable)
+      - docker build (stable tag)
     volumes:
     - name: dockersock
       path: /var/run
@@ -129,6 +132,9 @@ steps:
 
   - name: Test image
     image: docker:dind
+    depends_on:
+      - docker build (lite)
+      - docker build (lite tag)
     volumes:
     - name: dockersock
       path: /var/run
@@ -192,6 +198,9 @@ steps:
 
   - name: Test image
     image: docker:dind
+    depends_on:
+      - docker build (testing)
+      - docker build (feature)
     volumes:
     - name: dockersock
       path: /var/run
