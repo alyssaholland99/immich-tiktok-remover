@@ -1,0 +1,1 @@
+sed -i -e 's|stable|testing|' docker-compose.yml

@@ -48,6 +48,22 @@ steps:
         - stable
         - ${DRONE_TAG}
 
+  - name: Test image
+    image: docker:dind
+    volumes:
+    - name: dockersock
+      path: /var/run
+    commands:
+    - sleep 5 # give docker enough time to start
+    - ./testing/docker/setup_time.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/setup_videos.sh
+    - ./testing/docker/run_tiktok_remover.sh
+    - ./testing/docker/check_itr_output.sh
+    - ./testing/docker/cleanup.sh
+
+    # API Key: NEZqh8TiO9L1Bk4MBZVO6bQoDjBeAoQfBZt5r46q5pw
+
 ---
 kind: pipeline
 type: docker
@@ -111,6 +127,23 @@ steps:
         - stable-lite
         - ${DRONE_TAG}
 
+  - name: Test image
+    image: docker:dind
+    volumes:
+    - name: dockersock
+      path: /var/run
+    commands:
+    - sleep 5 # give docker enough time to start
+    - ./testing/docker/setup_time.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/set_stable-lite.sh
+    - ./testing/docker/setup_videos.sh
+    - ./testing/docker/run_tiktok_remover.sh
+    - ./testing/docker/check_itr_output.sh
+    - ./testing/docker/cleanup.sh
+
+    # API Key: NEZqh8TiO9L1Bk4MBZVO6bQoDjBeAoQfBZt5r46q5pw
+
 ---
 kind: pipeline
 type: docker
@@ -129,41 +162,60 @@ trigger:
 
 steps:
 
-#  - name: docker build (feature)
-#    when:
-#      branch:
-#        include:
-#          - feature/*
-#    image: plugins/docker
-#    settings:
-#      username:
-#        from_secret: DOCKERHUB_USER
-#      password:
-#        from_secret: DOCKERHUB_PASS
-#      repo:
-#        from_secret: DOCKERHUB_REPOSITORY
-#      tags:
-#        - edgerunner
-#
-#  - name: docker build (testing)
-#    image: plugins/docker
-#    settings:
-#      username:
-#        from_secret: DOCKERHUB_USER
-#      password:
-#        from_secret: DOCKERHUB_PASS
-#      repo:
-#        from_secret: DOCKERHUB_REPOSITORY
-#      tags:
-#        - testing
+  - name: docker build (feature)
+    when:
+      branch:
+        include:
+          - feature/*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - edgerunner
 
-  - name: test image
-    image: debian:bookworm-slim
-    commands:
-      - ./testing/docker/setup_debian.sh
-      - ./testing/docker/setup_compose.sh
+  - name: docker build (testing)
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - testing
+
+  - name: Test image
+    image: docker:dind
     volumes:
-    - name: docker_sock
-      host:
-        path: /var/run/docker.sock
+    - name: dockersock
+      path: /var/run
+    commands:
+    - sleep 5 # give docker enough time to start
+    - ./testing/docker/setup_time.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/set_testing.sh
+    - ./testing/docker/setup_videos.sh
+    - ./testing/docker/run_tiktok_remover.sh
+    - ./testing/docker/check_itr_output.sh
+    - ./testing/docker/cleanup.sh
 
+    # API Key: NEZqh8TiO9L1Bk4MBZVO6bQoDjBeAoQfBZt5r46q5pw
+
+
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+
+volumes:
+- name: dockersock
+  temp: {}
