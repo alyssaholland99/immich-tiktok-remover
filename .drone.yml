@@ -180,7 +180,6 @@ steps:
     - sleep 5 # give docker enough time to start
     - ls ./testing/docker
     - /bin/sh ./testing/docker/setup_time.sh
-    - /bin/sh ./testing/docker/set_testing.sh
     - /bin/sh ./testing/docker/setup_compose.sh
     - /bin/sh ./testing/docker/restore_db.sh
     - /bin/sh ./testing/docker/setup_videos.sh
