@@ -1,4 +1,18 @@
+# Common settings for Docker builds
+common_docker_settings:
+  username: { from_secret: DOCKERHUB_USER }
+  password: { from_secret: DOCKERHUB_PASS }
+  repo: { from_secret: DOCKERHUB_REPOSITORY }
+
+# Build tags configuration
+build_tags:
+  stable: "stable"
+  stable-lite: "stable-lite"
+  stable-arm: "stable-arm"
+  stable-lite-arm: "stable-lite-arm"
+
 ---
+
 kind: pipeline
 type: docker
 name: stable
@@ -9,46 +23,28 @@ trigger:
     - tag
 
 steps:
-  - name: docker build (stable)
-    when:
-      event:
-        include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-full/*
+  - name: build-stable
     image: plugins/docker
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable
+        - $build_tags.stable
 
-  - name: docker build (stable tag)
+  - name: tag-stable
+    image: plugins/docker
     when:
       event:
         include: [tag]
       ref:
-        include:
-          - refs/tags/v*
-    image: plugins/docker
+        include: [refs/tags/v*]
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable
+        - $build_tags.stable
         - ${DRONE_TAG}
 
 ---
+
 kind: pipeline
 type: docker
 name: stable-lite
@@ -59,60 +55,36 @@ trigger:
     - tag
 
 steps:
-  - name: setup lite
+  - name: setup-lite
     when:
       event:
         include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-lite/*
     image: plugins/docker
     commands:
       - ./make_lite.sh
 
-  - name: docker build (lite)
-    when:
-      event:
-        include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-lite/*
+  - name: build-stable-lite
     image: plugins/docker
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable-lite
+        - $build_tags.stable-lite
 
-  - name: docker build (lite tag)
+  - name: tag-stable-lite
+    image: plugins/docker
     when:
       event:
         include: [tag]
       ref:
-        include:
-          - refs/tags/v*
-    image: plugins/docker
+        include: [refs/tags/v*]
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable-lite
-        - ${DRONE_TAG}
-
+        - $build_tags.stable-lite
+        - ${DRONE_TAG}-lite
 
 ---
+
 kind: pipeline
 type: docker
 name: stable-arm
@@ -127,46 +99,28 @@ platform:
   arch: arm
 
 steps:
-  - name: docker build (stable-arm)
-    when:
-      event:
-        include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-full/*
+  - name: build-stable-arm
     image: plugins/docker
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable-arm
+        - $build_tags.stable-arm
 
-  - name: docker build (stable tag)
+  - name: tag-stable-arm
+    image: plugins/docker
     when:
       event:
         include: [tag]
       ref:
-        include:
-          - refs/tags/v*
-    image: plugins/docker
+        include: [refs/tags/v*]
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable-arm
+        - $build_tags.stable-arm
         - ${DRONE_TAG}-arm
 
 ---
+
 kind: pipeline
 type: docker
 name: stable-lite-arm
@@ -181,59 +135,36 @@ platform:
   arch: arm
 
 steps:
-  - name: setup lite
+  - name: setup-lite
     when:
       event:
         include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-lite/*
     image: plugins/docker
     commands:
       - ./make_lite.sh
 
-  - name: docker build (lite)
-    when:
-      event:
-        include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-lite/*
+  - name: build-stable-lite-arm
     image: plugins/docker
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable-lite-arm
+        - $build_tags.stable-lite-arm
 
-  - name: docker build (lite tag)
+  - name: tag-stable-lite-arm
+    image: plugins/docker
     when:
       event:
         include: [tag]
       ref:
-        include:
-          - refs/tags/v*
-    image: plugins/docker
+        include: [refs/tags/v*]
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
-        - stable-lite-arm
+        - $build_tags.stable-lite-arm
         - ${DRONE_TAG}-lite-arm
 
 ---
+
 kind: pipeline
 type: docker
 name: other-branches
@@ -250,36 +181,25 @@ trigger:
       - docker_image_lite
 
 steps:
-
-  - name: docker build (feature)
+  - name: build-feature
     when:
       branch:
-        include:
-          - feature/*
+        include: [feature/*]
     image: plugins/docker
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
         - edgerunner
 
-  - name: docker build (testing)
+  - name: build-testing
     image: plugins/docker
     settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-       from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
+      <<: *common_docker_settings
       tags:
         - testing
 
 ---
+
 kind: pipeline
 type: docker
 name: test-image
@@ -292,33 +212,30 @@ trigger:
       - only-for-testing
 
 steps:
-
-  - name: Test image
+  - name: test-image
     image: docker:dind
     volumes:
-    - name: dockersock
-      path: /var/run
+      - name: dockersock
+        path: /var/run
     commands:
-    - sleep 5 # give docker enough time to start
-    - ls ./testing/docker
-    - /bin/sh ./testing/docker/setup_time.sh
-    - /bin/sh ./testing/docker/setup_compose.sh
-    - /bin/sh ./testing/docker/restore_db.sh
-    - /bin/sh ./testing/docker/setup_videos.sh
-    - /bin/sh ./testing/docker/run_tiktok_remover.sh
-    - /bin/sh ./testing/docker/check_itr_output.sh
-    - /bin/sh ./testing/docker/cleanup.sh
-
-    # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
+      - sleep 5 # give docker enough time to start
+      - ls ./testing/docker
+      - /bin/sh ./testing/docker/setup_time.sh
+      - /bin/sh ./testing/docker/setup_compose.sh
+      - /bin/sh ./testing/docker/restore_db.sh
+      - /bin/sh ./testing/docker/setup_videos.sh
+      - /bin/sh ./testing/docker/run_tiktok_remover.sh
+      - /bin/sh ./testing/docker/check_itr_output.sh
+      - /bin/sh ./testing/docker/cleanup.sh
 
 services:
-- name: docker
-  image: docker:dind
-  privileged: true
-  volumes:
-  - name: dockersock
-    path: /var/run
+  - name: docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
 
 volumes:
-- name: dockersock
-  temp: {}
+  - name: dockersock
+    temp: {}
