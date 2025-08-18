@@ -111,6 +111,128 @@ steps:
         - stable-lite
         - ${DRONE_TAG}
 
+
+---
+kind: pipeline
+type: docker
+name: stable-arm
+
+trigger:
+  event:
+    - push
+    - tag
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+  - name: docker build (stable-arm)
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-full/*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable-arm
+
+  - name: docker build (stable tag)
+    when:
+      event:
+        include: [tag]
+      ref:
+        include:
+          - refs/tags/v*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable-arm
+        - ${DRONE_TAG}-arm
+
+---
+kind: pipeline
+type: docker
+name: stable-lite-arm
+
+trigger:
+  event:
+    - push
+    - tag
+
+platform:
+  os: linux
+  arch: arm
+
+steps:
+  - name: setup lite
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-lite/*
+    image: plugins/docker
+    commands:
+      - ./make_lite.sh
+
+  - name: docker build (lite)
+    when:
+      event:
+        include: [push]
+      branch:
+        include:
+          - master
+          - stable/*
+          - stable-lite/*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable-lite-arm
+
+  - name: docker build (lite tag)
+    when:
+      event:
+        include: [tag]
+      ref:
+        include:
+          - refs/tags/v*
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+        from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - stable-lite-arm
+        - ${DRONE_TAG}-lite-arm
+
 ---
 kind: pipeline
 type: docker
