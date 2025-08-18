@@ -9,4 +9,4 @@ sudo ./testing/docker/setup_videos.sh
 sudo ./testing/docker/run_tiktok_remover.sh
 sudo ./testing/docker/check_itr_output.sh
 sudo mv docker-compose-backup.yml docker-compose.yml
-sudo ./testing/docker/cleanup.sh
+sudo ./testing/docker/cleanup.sh 2>/dev/null 
