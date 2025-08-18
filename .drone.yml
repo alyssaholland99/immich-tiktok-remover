@@ -64,13 +64,13 @@ steps:
       path: /var/run
     commands:
     - sleep 5 # give docker enough time to start
-    - ./testing/docker/setup_time.sh
-    - ./testing/docker/setup_compose.sh
-    - ./testing/docker/restore_db.sh
-    - ./testing/docker/setup_videos.sh
-    - ./testing/docker/run_tiktok_remover.sh
-    - ./testing/docker/check_itr_output.sh
-    - ./testing/docker/cleanup.sh
+    - /bin/sh ./testing/docker/setup_time.sh
+    - /bin/sh ./testing/docker/setup_compose.sh
+    - /bin/sh ./testing/docker/restore_db.sh
+    - /bin/sh ./testing/docker/setup_videos.sh
+    - /bin/sh ./testing/docker/run_tiktok_remover.sh
+    - /bin/sh ./testing/docker/check_itr_output.sh
+    - /bin/sh ./testing/docker/cleanup.sh
 
   - name: Test image (push)
     image: docker:dind
@@ -90,13 +90,13 @@ steps:
       path: /var/run
     commands:
     - sleep 5 # give docker enough time to start
-    - ./testing/docker/setup_time.sh
-    - ./testing/docker/setup_compose.sh
-    - ./testing/docker/restore_db.sh
-    - ./testing/docker/setup_videos.sh
-    - ./testing/docker/run_tiktok_remover.sh
-    - ./testing/docker/check_itr_output.sh
-    - ./testing/docker/cleanup.sh
+    - /bin/sh ./testing/docker/setup_time.sh
+    - /bin/sh ./testing/docker/setup_compose.sh
+    - /bin/sh ./testing/docker/restore_db.sh
+    - /bin/sh ./testing/docker/setup_videos.sh
+    - /bin/sh ./testing/docker/run_tiktok_remover.sh
+    - /bin/sh ./testing/docker/check_itr_output.sh
+    - /bin/sh ./testing/docker/cleanup.sh
 
     # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
 
@@ -179,14 +179,14 @@ steps:
       path: /var/run
     commands:
     - sleep 5 # give docker enough time to start
-    - ./testing/docker/setup_time.sh
-    - ./testing/docker/set_stable-lite.sh
-    - ./testing/docker/setup_compose.sh
-    - ./testing/docker/restore_db.sh
-    - ./testing/docker/setup_videos.sh
-    - ./testing/docker/run_tiktok_remover.sh
-    - ./testing/docker/check_itr_output.sh
-    - ./testing/docker/cleanup.sh
+    - /bin/sh ./testing/docker/setup_time.sh
+    - /bin/sh ./testing/docker/set_stable-lite.sh
+    - /bin/sh ./testing/docker/setup_compose.sh
+    - /bin/sh ./testing/docker/restore_db.sh
+    - /bin/sh ./testing/docker/setup_videos.sh
+    - /bin/sh ./testing/docker/run_tiktok_remover.sh
+    - /bin/sh ./testing/docker/check_itr_output.sh
+    - /bin/sh ./testing/docker/cleanup.sh
 
   - name: Test image (push)
     image: docker:dind
@@ -206,14 +206,14 @@ steps:
       path: /var/run
     commands:
     - sleep 5 # give docker enough time to start
-    - ./testing/docker/setup_time.sh
-    - ./testing/docker/set_stable-lite.sh
-    - ./testing/docker/setup_compose.sh
-    - ./testing/docker/restore_db.sh
-    - ./testing/docker/setup_videos.sh
-    - ./testing/docker/run_tiktok_remover.sh
-    - ./testing/docker/check_itr_output.sh
-    - ./testing/docker/cleanup.sh
+    - /bin/sh ./testing/docker/setup_time.sh
+    - /bin/sh ./testing/docker/set_stable-lite.sh
+    - /bin/sh ./testing/docker/setup_compose.sh
+    - /bin/sh ./testing/docker/restore_db.sh
+    - /bin/sh ./testing/docker/setup_videos.sh
+    - /bin/sh ./testing/docker/run_tiktok_remover.sh
+    - /bin/sh ./testing/docker/check_itr_output.sh
+    - /bin/sh ./testing/docker/cleanup.sh
 
     # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
 ---
@@ -272,14 +272,15 @@ steps:
       path: /var/run
     commands:
     - sleep 5 # give docker enough time to start
-    - ./testing/docker/setup_time.sh
-    - ./testing/docker/set_testing.sh
-    - ./testing/docker/setup_compose.sh
-    - ./testing/docker/restore_db.sh
-    - ./testing/docker/setup_videos.sh
-    - ./testing/docker/run_tiktok_remover.sh
-    - ./testing/docker/check_itr_output.sh
-    - ./testing/docker/cleanup.sh
+    - ls ./testing/docker
+    - /bin/sh ./testing/docker/setup_time.sh
+    - /bin/sh ./testing/docker/set_testing.sh
+    - /bin/sh ./testing/docker/setup_compose.sh
+    - /bin/sh ./testing/docker/restore_db.sh
+    - /bin/sh ./testing/docker/setup_videos.sh
+    - /bin/sh ./testing/docker/run_tiktok_remover.sh
+    - /bin/sh ./testing/docker/check_itr_output.sh
+    - /bin/sh ./testing/docker/cleanup.sh
 
     # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
 
