@@ -250,23 +250,23 @@ steps:
       tags:
         - edgerunner
 
-  - name: docker build (testing)
-    image: plugins/docker
-    settings:
-      username:
-        from_secret: DOCKERHUB_USER
-      password:
-        from_secret: DOCKERHUB_PASS
-      repo:
-        from_secret: DOCKERHUB_REPOSITORY
-      tags:
-        - testing
+  #- name: docker build (testing)
+  #  image: plugins/docker
+  #  settings:
+  #    username:
+  #      from_secret: DOCKERHUB_USER
+  #    password:
+  #      from_secret: DOCKERHUB_PASS
+  #    repo:
+  #      from_secret: DOCKERHUB_REPOSITORY
+  #    tags:
+  #      - testing
 
   - name: Test image
     image: docker:dind
-    depends_on:
-      - docker build (testing)
-      - docker build (feature)
+    #depends_on:
+    #  - docker build (testing)
+    #  - docker build (feature)
     volumes:
     - name: dockersock
       path: /var/run
