@@ -48,58 +48,6 @@ steps:
         - stable
         - ${DRONE_TAG}
 
-  - name: Test image (tag)
-    image: docker:dind
-    when:
-      event:
-        include: [tag]
-      ref:
-        include:
-          - refs/tags/v*
-    depends_on:
-      - docker build (stable)
-      - docker build (stable tag)
-    volumes:
-    - name: dockersock
-      path: /var/run
-    commands:
-    - sleep 5 # give docker enough time to start
-    - /bin/sh ./testing/docker/setup_time.sh
-    - /bin/sh ./testing/docker/setup_compose.sh
-    - /bin/sh ./testing/docker/restore_db.sh
-    - /bin/sh ./testing/docker/setup_videos.sh
-    - /bin/sh ./testing/docker/run_tiktok_remover.sh
-    - /bin/sh ./testing/docker/check_itr_output.sh
-    - /bin/sh ./testing/docker/cleanup.sh
-
-  - name: Test image (push)
-    image: docker:dind
-    when:
-      event:
-        include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-full/*
-    depends_on:
-      - docker build (stable)
-      - docker build (stable tag)
-    volumes:
-    - name: dockersock
-      path: /var/run
-    commands:
-    - sleep 5 # give docker enough time to start
-    - /bin/sh ./testing/docker/setup_time.sh
-    - /bin/sh ./testing/docker/setup_compose.sh
-    - /bin/sh ./testing/docker/restore_db.sh
-    - /bin/sh ./testing/docker/setup_videos.sh
-    - /bin/sh ./testing/docker/run_tiktok_remover.sh
-    - /bin/sh ./testing/docker/check_itr_output.sh
-    - /bin/sh ./testing/docker/cleanup.sh
-
-    # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
-
 ---
 kind: pipeline
 type: docker
@@ -163,59 +111,6 @@ steps:
         - stable-lite
         - ${DRONE_TAG}
 
-  - name: Test image (tag)
-    image: docker:dind
-    when:
-      event:
-        include: [tag]
-      ref:
-        include:
-          - refs/tags/v*
-    depends_on:
-      - docker build (lite)
-      - docker build (lite tag)
-    volumes:
-    - name: dockersock
-      path: /var/run
-    commands:
-    - sleep 5 # give docker enough time to start
-    - /bin/sh ./testing/docker/setup_time.sh
-    - /bin/sh ./testing/docker/set_stable-lite.sh
-    - /bin/sh ./testing/docker/setup_compose.sh
-    - /bin/sh ./testing/docker/restore_db.sh
-    - /bin/sh ./testing/docker/setup_videos.sh
-    - /bin/sh ./testing/docker/run_tiktok_remover.sh
-    - /bin/sh ./testing/docker/check_itr_output.sh
-    - /bin/sh ./testing/docker/cleanup.sh
-
-  - name: Test image (push)
-    image: docker:dind
-    when:
-      event:
-        include: [push]
-      branch:
-        include:
-          - master
-          - stable/*
-          - stable-lite/*
-    depends_on:
-      - docker build (lite)
-      - docker build (lite tag)
-    volumes:
-    - name: dockersock
-      path: /var/run
-    commands:
-    - sleep 5 # give docker enough time to start
-    - /bin/sh ./testing/docker/setup_time.sh
-    - /bin/sh ./testing/docker/set_stable-lite.sh
-    - /bin/sh ./testing/docker/setup_compose.sh
-    - /bin/sh ./testing/docker/restore_db.sh
-    - /bin/sh ./testing/docker/setup_videos.sh
-    - /bin/sh ./testing/docker/run_tiktok_remover.sh
-    - /bin/sh ./testing/docker/check_itr_output.sh
-    - /bin/sh ./testing/docker/cleanup.sh
-
-    # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
 ---
 kind: pipeline
 type: docker
@@ -250,23 +145,34 @@ steps:
       tags:
         - edgerunner
 
-  #- name: docker build (testing)
-  #  image: plugins/docker
-  #  settings:
-  #    username:
-  #      from_secret: DOCKERHUB_USER
-  #    password:
-  #      from_secret: DOCKERHUB_PASS
-  #    repo:
-  #      from_secret: DOCKERHUB_REPOSITORY
-  #    tags:
-  #      - testing
+  - name: docker build (testing)
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DOCKERHUB_USER
+      password:
+       from_secret: DOCKERHUB_PASS
+      repo:
+        from_secret: DOCKERHUB_REPOSITORY
+      tags:
+        - testing
+
+---
+kind: pipeline
+type: docker
+name: test-image
+
+trigger:
+  event:
+    - push
+  branch:
+    include:
+      - only-for-testing
+
+steps:
 
   - name: Test image
     image: docker:dind
-    #depends_on:
-    #  - docker build (testing)
-    #  - docker build (feature)
     volumes:
     - name: dockersock
       path: /var/run
@@ -283,7 +189,6 @@ steps:
     - /bin/sh ./testing/docker/cleanup.sh
 
     # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
-
 
 services:
 - name: docker
