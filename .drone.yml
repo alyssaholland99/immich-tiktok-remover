@@ -128,6 +128,7 @@ trigger:
       - docker_image_lite
 
 steps:
+
   - name: docker build (feature)
     when:
       branch:
@@ -150,8 +151,52 @@ steps:
       username:
         from_secret: DOCKERHUB_USER
       password:
-        from_secret: DOCKERHUB_PASS
+       from_secret: DOCKERHUB_PASS
       repo:
         from_secret: DOCKERHUB_REPOSITORY
       tags:
         - testing
+
+---
+kind: pipeline
+type: docker
+name: test-image
+
+trigger:
+  event:
+    - push
+  branch:
+    include:
+      - only-for-testing
+
+steps:
+
+  - name: Test image
+    image: docker:dind
+    volumes:
+    - name: dockersock
+      path: /var/run
+    commands:
+    - sleep 5 # give docker enough time to start
+    - ls ./testing/docker
+    - /bin/sh ./testing/docker/setup_time.sh
+    - /bin/sh ./testing/docker/setup_compose.sh
+    - /bin/sh ./testing/docker/restore_db.sh
+    - /bin/sh ./testing/docker/setup_videos.sh
+    - /bin/sh ./testing/docker/run_tiktok_remover.sh
+    - /bin/sh ./testing/docker/check_itr_output.sh
+    - /bin/sh ./testing/docker/cleanup.sh
+
+    # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
+
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+
+volumes:
+- name: dockersock
+  temp: {}
