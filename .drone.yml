@@ -66,6 +66,7 @@ steps:
     - sleep 5 # give docker enough time to start
     - ./testing/docker/setup_time.sh
     - ./testing/docker/setup_compose.sh
+    - ./testing/docker/restore_db.sh
     - ./testing/docker/setup_videos.sh
     - ./testing/docker/run_tiktok_remover.sh
     - ./testing/docker/check_itr_output.sh
@@ -91,12 +92,13 @@ steps:
     - sleep 5 # give docker enough time to start
     - ./testing/docker/setup_time.sh
     - ./testing/docker/setup_compose.sh
+    - ./testing/docker/restore_db.sh
     - ./testing/docker/setup_videos.sh
     - ./testing/docker/run_tiktok_remover.sh
     - ./testing/docker/check_itr_output.sh
     - ./testing/docker/cleanup.sh
 
-    # API Key: NEZqh8TiO9L1Bk4MBZVO6bQoDjBeAoQfBZt5r46q5pw
+    # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
 
 ---
 kind: pipeline
@@ -178,8 +180,9 @@ steps:
     commands:
     - sleep 5 # give docker enough time to start
     - ./testing/docker/setup_time.sh
-    - ./testing/docker/setup_compose.sh
     - ./testing/docker/set_stable-lite.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/restore_db.sh
     - ./testing/docker/setup_videos.sh
     - ./testing/docker/run_tiktok_remover.sh
     - ./testing/docker/check_itr_output.sh
@@ -204,14 +207,15 @@ steps:
     commands:
     - sleep 5 # give docker enough time to start
     - ./testing/docker/setup_time.sh
-    - ./testing/docker/setup_compose.sh
     - ./testing/docker/set_stable-lite.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/restore_db.sh
     - ./testing/docker/setup_videos.sh
     - ./testing/docker/run_tiktok_remover.sh
     - ./testing/docker/check_itr_output.sh
     - ./testing/docker/cleanup.sh
 
-    # API Key: NEZqh8TiO9L1Bk4MBZVO6bQoDjBeAoQfBZt5r46q5pw
+    # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
 ---
 kind: pipeline
 type: docker
@@ -269,14 +273,15 @@ steps:
     commands:
     - sleep 5 # give docker enough time to start
     - ./testing/docker/setup_time.sh
-    - ./testing/docker/setup_compose.sh
     - ./testing/docker/set_testing.sh
+    - ./testing/docker/setup_compose.sh
+    - ./testing/docker/restore_db.sh
     - ./testing/docker/setup_videos.sh
     - ./testing/docker/run_tiktok_remover.sh
     - ./testing/docker/check_itr_output.sh
     - ./testing/docker/cleanup.sh
 
-    # API Key: NEZqh8TiO9L1Bk4MBZVO6bQoDjBeAoQfBZt5r46q5pw
+    # API Key: sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4
 
 
 services:

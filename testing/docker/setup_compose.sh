@@ -1,7 +1,10 @@
+#!/bin/bash
+
 mkdir tmp
+
+chmod -R +rw ./testing/docker/templates
+
 cp ./testing/docker/templates/env-template tmp/.env
-cp -r ./testing/docker/templates/library tmp/library
-cp -r ./testing/docker/templates/postgres tmp/postgres
 
 cp /etc/localtime tmp/time
 
