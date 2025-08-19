@@ -62,12 +62,20 @@ steps:
   - name: setup lite
     when:
       event:
-        include: [push, tag]
+        include: [push]
       branch:
         include:
           - master
           - stable/*
           - stable-lite/*
+    image: plugins/docker
+    commands:
+      - ./make_lite.sh
+
+  - name: setup lite (tag)
+    when:
+      event:
+        include: [tag]
       ref:
         include:
           - refs/tags/v*
