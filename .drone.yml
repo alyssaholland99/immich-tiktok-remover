@@ -109,7 +109,7 @@ steps:
         from_secret: DOCKERHUB_REPOSITORY
       tags:
         - stable-lite
-        - ${DRONE_TAG}
+        - ${DRONE_TAG}-lite
 
 ---
 kind: pipeline
