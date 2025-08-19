@@ -62,7 +62,7 @@ steps:
   - name: setup lite
     when:
       event:
-        include: [push]
+        include: [push, tag]
       branch:
         include:
           - master
