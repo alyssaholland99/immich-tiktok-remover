@@ -68,6 +68,9 @@ steps:
           - master
           - stable/*
           - stable-lite/*
+      ref:
+        include:
+          - refs/tags/v*
     image: plugins/docker
     commands:
       - ./make_lite.sh
