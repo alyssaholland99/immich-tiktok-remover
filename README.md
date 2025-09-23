@@ -14,6 +14,18 @@ In my testing, out of 3569 videos, Immich-Tiktok-Remover found 1953 TikTok video
 
 I found no videos that were falsely detected as TikToks.
 
+## Immich API Key
+How to get your Immich key
+
+1) Go to your Immich server and sign in 
+2) Click your profile in the top right
+3) Click on `Account Settings`
+4) Click `API Keys`
+5) Click `New API Key`
+6) You may need the `all` permissions from Immich 1.137.0 due to API key changes
+7) Click `Create`
+8) Copy the API key and save it for when you need to run the tool
+
 ## Customization
 Here are all the customization options available for Immich-Tiktok-Remover:
 
@@ -55,6 +67,63 @@ Sets the --file-types to check mp4, webp and mov files.
 - It cannot by itself delete TikTok videos as soon as you upload one. Immich-Tiktok-Remover only removes TikTok videos when you either manually run it or schedule its execution, for example, by creating a cron job.
 - Immich-Tiktok-Remover can't remove all TikTok videos in a few seconds. This is a process that can take some time, simply because of the way EasyOCR works and the performance it can deliver.
 - Currently, Immich-Tiktok-Remover only works with videos. Images, downloaded from TikTok, aren't currently automatically deleted from Immich.
+
+## Docker Compose
+You can now use docker compose to run this project using the following template
+```
+services:
+  immich-tiktok-remover:
+    container_name: immich-tiktok-remover
+    image: alyssaholland99/immich-tiktok-remover:stable
+    restart: unless-stopped
+    environment:
+      IMMICH_URL: "https://immich.yourserver.co.uk/"
+      IMMICH_API: "your-immich-api-key"
+      RESTART_TIMEOUT: 3600 # Time in seconds the script waits to restart (default 1hr)
+
+      # Optional command line arguments, explanation can be found at https://github.com/mxc2/immich-tiktok-remover/blob/master/README.md
+      #OUTPUT_ALL=False
+      #ARCHIVE=False
+      #SEARCH_ARCHIVED=False
+      #FILE_TYPES=mp4
+      #FILE_NAME_LENGTH=32
+      #FILE_NAME_IS_NOT_ALUMN=False
+      #FILE_CREATED_AFTER=1472688000
+      #TEXT_TO_CHECK=TikTok
+      #AVOID_IMAGE_RECOGNITION=False  # If you're setting this to False, you may as well just use the 'stable-lite' image which is smaller on your filesystem
+```
+You'll have to swap out the URL and API key in the above file with ones tied to your server. 
+
+Use `docker compose up -d`  (`docker-compose up -d` on older versions) to pull the image and start the container. 
+
+Last Stable Drone Run from master branch: [![Build Status](https://drone.alyssaserver.co.uk/api/badges/alyssaholland99/immich-tiktok-remover/status.svg)](https://drone.alyssaserver.co.uk/alyssaholland99/immich-tiktok-remover)
+
+## Docker Image Testing
+You can test certain docker images for this tool by running `./run_test.sh`. This will allow you to test your own Docker images (if you have built it yourself) and even test your own videos to ensure there aren't any false positives/negatives.
+
+This will start up a fresh docker compose stack on your system in a tmp directory, modify it so it's ready to run, upload both TikTok and non-TikTok videos and run the Immich TikTok Remover tool. The test will then cound the number of files in the `tiktok_videos` directory and compare them to how many were removed by the tool.
+
+if you have drone installed locally, you can use `drone exec --pipeline test-image --trusted` to run the tests. It might be easier when doing actual development instead of testing to use the shell script above instead as it has a better cleanup then drone. This drone testing step doesn't currently run on a Drone server for some reason and I am yet to figure out why. 
+
+If you have exisitng services for Immich and Immich TikTok Remover, you may have to rename the services before you start these tests, run in a VM or run via drone.
+
+You can add addtional TikTok videos in the `tiktok_videos` directory and any non-TikTok videos in the `non-tiktok_videos` directory. Both of these are in `testing/docker/` so if you want to add your own videos to test, you can do that there. 
+
+You can modify which tag the tests are using by changing the `stable` tag in `docker-compose.yml`.
+
+These scripts are ready to be run in Drone and should be easy to modify to use your own Dockerhub repository. 
+
+Please note that the cleanup script does not prune images from the system, this is to stop Docker pulling images every time you want to test something but these images are pretty large so once you have done your testing it may be worth pruning them. 
+
+### Debugging the tests
+
+Login for Immich:
+```
+Username: itr@example.com
+Password: password
+```
+
+API Key for testing: `sHXdxnG2xoPNveGqJI8nZSlwTEMTFvILHqzCRFyfz4`
 
 ## Thanks
 Big thanks for the Immich team for building such a great project.
