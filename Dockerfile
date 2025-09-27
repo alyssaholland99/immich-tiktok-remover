@@ -40,6 +40,8 @@ COPY src/ .
 COPY requirements.txt .
 COPY run_docker.sh .
 
+RUN apt install build-essential
+
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 CMD ["./run_docker.sh"]
